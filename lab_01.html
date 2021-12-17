@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>lab_01</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    * {
+      line-height: 1.2;
+      margin: 0;
+    }
+
+    html {
+      color: #888;
+      display: table;
+      font-family: sans-serif;
+      height: 100%;
+      text-align: center;
+      width: 100%;
+    }
+
+    body {
+      display: table-cell;
+      vertical-align: middle;
+      margin: 2em auto;
+    }
+
+    h1 {
+      color: #555;
+      font-size: 2em;
+      font-weight: 400;
+    }
+
+    p {
+      margin: 0 auto;
+      width: 280px;
+    }
+
+    @media only screen and (max-width: 280px) {
+
+      body,
+      p {
+        width: 95%;
+      }
+
+      h1 {
+        font-size: 1.5em;
+        margin: 0 0 0.3em;
+      }
+
+    }
+  </style>
+</head>
+
+<body>
+  <canvas id="lab_01" width="500" height="500">
+  </canvas>
+  <script>
+    function Line(context, x0, y0, x1, y1) {
+      var eps = 0;
+      var x = x0, y = y0;
+      var A = y1 - y0;
+      var B = x1 - x0;
+      var SignA = A/Math.abs(A);
+      var SignB = B/Math.abs(B);
+      var k;
+
+      if (Math.abs(A) < Math.abs(B)) {
+        k = 2 * A;
+
+        for (x = x0; x !== x1; x += SignB) {
+          ctx.fillRect(x, y, 1, 1);
+          eps = eps + k;
+
+          if (Math.abs(eps) >= Math.abs(B)) {
+            y += SignA * 1;
+            eps -= SignA * SignB * B * 2;
+          }
+        }
+      } else {
+        k = 2*B;
+        for (y = y0; y !== y1; y += SignA) {
+          ctx.fillRect(x, y, 1, 1);
+          eps = eps + k;
+
+          if (Math.abs(eps) >= Math.abs(A)) {
+            x += SignB * 1;
+            eps -= SignA * SignB * A * 2;
+          }
+        }
+      }
+    }
+  </script>
+
+  <script>
+    const canvas = document.getElementById("lab_01");
+    const ctx = canvas.getContext("2d");
+    let flag = 0;
+    canvas.addEventListener("click", function(event) {
+      if (!flag) {
+        x0 = event.offsetX;
+        y0 = event.offsetY;
+        flag = 1;
+      } else {
+        x1 = event.offsetX;
+        y1 = event.offsetY;
+        Line(ctx, x0, y0, x1, y1);
+        flag = 0;
+      }
+    });
+  </script>
+
+</body>
+
+</html>
